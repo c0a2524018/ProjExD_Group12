@@ -12,12 +12,12 @@ os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
 class Chat:
     """
-    ゲーム画面に出力させる文字を出力
+    ゲーム画面にメッセージを出力
     """
-    def __init__(self, screen):
+    def __init__(self, screen: pg.Surface):
         self.screen = screen
         self.font = pg.font.SysFont("meiryo", 32)
-    def sent(self, message):
+    def sent(self, message: str):
         pg.draw.rect(self.screen, (0, 0, 0), (0, HEIGHT - 80, WIDTH, 80))
         text = self.font.render(message, True, (255, 255, 255))
         self.screen.blit(text, (20, HEIGHT - 55))
@@ -52,19 +52,23 @@ class Enemy:
         pass
 
 class TreasureChest:
+    """
+    宝箱を取得した時のクラス
+    Playerのhpか攻撃力をランダムで上昇させる
+    """
     def __init__(self):
         self.chesNum = random.randint(0, 1)
-    def getTreasure(self, Player_attack, Player_hp, Player_max_hp, scene, chat):
+    def getTreasure(self, Player_attack: Player.atk, Player_hp: Player.hp, Player_max_hp: Player.max_hp, scene: str, chat: Chat):
         if self.chesNum == 0:
             attack = random.randint(10, 15)
-            Player_attack = attack
+            Player_attack += attack #攻撃力を上昇
             chat.sent(f"攻撃力が{attack}アップした！")
         if self.chesNum == 1:
             hp = random.randint(50, 80)
-            Player_max_hp += hp
+            Player_max_hp += hp #maxhpとhpを上昇
             Player_hp += hp
             chat.sent(f"HPが{hp}回復した！")
-        scene = "select_action"
+        scene = "select_action" # シーン切り替え
 
 
 def main():
